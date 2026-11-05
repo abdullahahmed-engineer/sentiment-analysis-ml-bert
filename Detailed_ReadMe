@@ -1,0 +1,149 @@
+# NLP Text Classification & Model Benchmarking Pipeline
+
+## Project Overview
+
+This project implements an end-to-end Natural Language Processing (NLP) and machine learning pipeline for classifying textual comments, such as user feedback and social media comments, into six categories:
+
+- Positive
+- Negative
+- Interrogative
+- Imperative
+- Corrective
+- Miscellaneous
+
+The project focuses on text preprocessing, feature engineering, comparative machine learning, hyperparameter optimization, and model evaluation. Multiple classification algorithms are benchmarked using cross-validation and performance analysis techniques to investigate their effectiveness across different text categories.
+
+The work also explores transformer-based sentiment classification using BERT as a complementary approach.
+
+## Technologies & Libraries
+
+| Category | Tools and Libraries |
+|---|---|
+| Programming | Python |
+| Data Processing | Pandas, NumPy |
+| NLP | NLTK, autocorrect, pyspellchecker |
+| Machine Learning | Scikit-learn |
+| Visualization | Matplotlib, Seaborn, WordCloud |
+| Model Export | JSON |
+
+### Machine Learning Algorithms
+
+- Multinomial Naive Bayes
+- Gaussian Naive Bayes
+- Logistic Regression
+- Support Vector Classifier (Linear and RBF Kernel)
+- Random Forest
+- Decision Tree
+
+## Methodology & Pipeline
+
+### 1. Data Cleaning and Text Preprocessing
+
+Implemented a multi-step text preprocessing workflow to standardize informal user-generated comments.
+
+- **Text normalization:** Lowercasing, URL removal, newline handling, and punctuation and integer cleaning.
+- **Spell correction:** Used `autocorrect` and `pyspellchecker` to address spelling variations and common typing errors.
+- **Lemmatization:** Applied NLTK's `WordNetLemmatizer` to reduce words to their base forms.
+- **Stemming:** Used `SnowballStemmer` for additional word normalization.
+- **Stopword removal:** Applied NLTK English stopwords with custom exceptions to preserve semantically important words.
+
+Special care was taken to retain words such as *no*, *not*, *how*, and *what*, since removing them could change the meaning or intended classification of a comment.
+
+### 2. Feature Extraction and Scaling
+
+Converted textual data into numerical representations suitable for machine learning.
+
+- **Bag-of-Words:** Constructed a vocabulary based on word frequency.
+- **Frequency filtering:** Excluded words occurring five times or fewer to reduce the influence of rare terms.
+- **Feature scaling and normalization:** Evaluated multiple approaches:
+  - StandardScaler
+  - MinMaxScaler
+  - RobustScaler
+  - L2 Normalization
+
+Different scaling approaches were investigated to compare their effects on model performance.
+
+### 3. Model Development and Hyperparameter Optimization
+
+Developed and benchmarked six classifier families, including linear and kernel-based SVM variants.
+
+| Model | Hyperparameters Investigated |
+|---|---|
+| Multinomial Naive Bayes | `alpha`, `fit_prior` |
+| Logistic Regression | Solver, regularization penalty (L1/L2) |
+| Gaussian Naive Bayes | `var_smoothing` |
+| Linear SVC | Regularization parameter `C` |
+| RBF Kernel SVC | `C`, `gamma` |
+| Random Forest | `n_estimators`, `max_features`, split criterion |
+| Decision Tree | `max_depth`, `min_samples_split`, `min_samples_leaf` |
+
+Model selection and evaluation involved:
+
+- `GridSearchCV` for hyperparameter optimization.
+- 10-fold cross-validation.
+- `RepeatedStratifiedKFold` for repeated stratified evaluation.
+- `cross_val_score` for cross-validation performance assessment.
+- `train_test_split` for training and testing data separation.
+
+### 4. Model Evaluation and Performance Analysis
+
+Implemented multiple evaluation techniques to assess classification performance beyond overall accuracy.
+
+**Classification evaluation**
+- Confusion matrices for analyzing classification errors.
+- Custom `acc_each_class` functions for class-wise performance analysis.
+- Individual precision, recall, and accuracy measurements for the different categories.
+- Comparative evaluation across classification algorithms.
+
+**Performance visualization**
+- Comparative histograms of class-wise model performance.
+- Learning curves showing training and cross-validation performance against training dataset size.
+- Training-time analysis to investigate computational requirements.
+- Model performance and fit-time comparisons to examine accuracy and computational trade-offs.
+
+**Decision tree visualization**
+- Exported Decision Tree structures into `.dot` files for visualization and interpretation.
+
+### 5. Results Export and Integration
+
+- Serialized evaluation results and prediction dictionaries into a structured JSON file (`prediction.json`).
+- Prepared prediction outputs in a format suitable for downstream server-side integration.
+
+## Results
+
+The project demonstrated the effectiveness of traditional machine learning techniques for multi-category text classification.
+
+| Experiment | Result |
+|---|---|
+| Traditional ML classification | Accuracy exceeded 84% |
+| BERT-based sentiment analysis | Approximately 90% accuracy on the evaluated positive/negative subset |
+
+The traditional machine learning results relate to the six-category classification task. The BERT result refers specifically to the positive/negative subset and should not be interpreted as a six-category benchmark.
+
+The comparative evaluation also provided insights into:
+- Differences in performance across classification algorithms.
+- The effect of preprocessing and feature scaling on model performance.
+- Class-specific classification strengths and weaknesses.
+- The relationship between training dataset size, model performance, and computational cost.
+
+## Key Learning Outcomes
+
+Through this project, I gained practical experience in:
+
+- Building an end-to-end NLP classification pipeline.
+- Text preprocessing, normalization, and feature engineering.
+- Applying traditional machine learning algorithms to text data.
+- Hyperparameter optimization and cross-validation.
+- Evaluating model performance across multiple classes.
+- Analyzing learning curves and computational trade-offs.
+- Preparing model predictions and evaluation results for downstream integration.
+- Exploring transformer-based approaches for sentiment analysis.
+
+
+
+## Future Improvements
+
+- Extend transformer-based classification to all six categories.
+- Compare traditional Bag-of-Words features with TF-IDF and contextual embeddings.
+- Investigate class imbalance and additional class-specific evaluation metrics.
+- Develop a deployable inference interface for real-time text classification.
